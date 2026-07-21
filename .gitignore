@@ -112,3 +112,25 @@ outputs/
 .vscode/
 .idea/
 __MACOSX/
+
+# ASVspoof audio
+*.flac
+*.wav
+ASVspoof2019*/
+# Credentials
+.netrc
+*.token
+# Model checkpoints
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+# Grading artifacts
+grading/grades.csv
+grading/students_solutions/*.csv
+!grading/students_solutions/.gitkeep
+# Report temporary files
+reports/*.aux
+reports/*.log
+reports/*.out
+reports/*.toc
