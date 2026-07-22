@@ -22,5 +22,5 @@ inferencer:
     - labels
   device: auto
   seed: 1
-  save_path: one-batch-smoke
+  save_path: full-eval-inference
   from_pretrained: null
