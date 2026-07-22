@@ -1,0 +1,5 @@
+_target_: src.transforms.spectrogram.LogPowerSpectrogram
+n_fft: 1724
+win_length: 1724
+hop_length: 130 #0.0081 sec * 16000 samples/sec ≈ 130 samples.
+target_frames: 600
