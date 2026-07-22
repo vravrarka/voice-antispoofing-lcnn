@@ -5,6 +5,7 @@ from src.metrics.eer import (
     calculate_eer_metric,
 )
 __all__ = [
+    "Accuracy",
     "EERAccumulator",
     "bonafide_score_from_logits",
     "calculate_eer_metric",
