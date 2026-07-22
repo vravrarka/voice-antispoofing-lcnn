@@ -59,6 +59,8 @@ class Trainer(BaseTrainer):
         self._epoch_train_loss_sum = 0.0
         self._epoch_train_examples = 0
         logs = super()._train_epoch(epoch)
+        if self.lr_scheduler is not None:
+                self.lr_scheduler.step()
         if self._epoch_train_examples == 0:
             raise RuntimeError(
                 "No training examples were processed."
@@ -139,8 +141,6 @@ class Trainer(BaseTrainer):
             batch["loss"].backward()  # sum of all losses is always called loss
             self._clip_grad_norm()
             self.optimizer.step()
-            if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
 
         batch_size = int(
             batch["labels"].shape[0]
