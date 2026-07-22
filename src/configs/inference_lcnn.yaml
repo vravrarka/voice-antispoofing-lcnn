@@ -1,0 +1,26 @@
+defaults:
+  - model: lcnn
+  - datasets: asvspoof_one_batch_eval
+  - dataloader: asvspoof
+  - paths: kaggle
+  - _self_
+
+metrics:
+  train: []
+  inference:
+    - _target_: src.metrics.Accuracy
+      name: accuracy
+
+transforms:
+  batch_transforms:
+    train: null
+    inference: null
+
+inferencer:
+  device_tensors:
+    - features
+    - labels
+  device: auto
+  seed: 1
+  save_path: one-batch-smoke
+  from_pretrained: null
