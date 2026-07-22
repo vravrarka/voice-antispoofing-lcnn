@@ -55,6 +55,17 @@ class WandBWriter:
                 save_code=kwargs.get("save_code", False),
             )
             self.wandb = wandb
+            self.run.define_metric("epoch")
+
+            for metric_name in (
+                "train_loss",
+                "dev_loss",
+                "eval_err",
+            ):
+                self.wandb.define_metric(
+                    metric_name,
+                    step_metric="epoch",
+                )
 
         except ImportError:
             logger.warning("For use wandb install it via \n\t pip install wandb")
@@ -64,6 +75,21 @@ class WandBWriter:
         # used to separate Partition1 and Partition2 metrics
         self.mode = ""
         self.timer = datetime.now()
+
+    def add_epoch_metrics(
+        self,
+        epoch: int,
+        metrics: dict[str, float],
+    ) -> None:
+        self.wandb.log(
+            {
+                "epoch": int(epoch),
+                **{
+                    name: float(value)
+                    for name, value in metrics.items()
+                },
+            }
+        )
 
     def set_step(self, step, mode="train"):
         """
