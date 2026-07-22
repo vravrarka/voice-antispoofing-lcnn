@@ -1,9 +1,12 @@
 defaults:
-  - model: lcnn
   - writer: wandb
   - datasets: asvspoof
   - dataloader: asvspoof
+  - paths: kaggle
   - _self_
+
+model:
+  _target_: src.model.LCNN
 
 optimizer:
   _target_: torch.optim.Adam
@@ -22,6 +25,11 @@ loss_function:
 metrics:
   train: []
   inference: []
+
+transforms:
+  batch_transforms:
+    train: null
+    inference: null
 
 trainer:
   log_step: 50
