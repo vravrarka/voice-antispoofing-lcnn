@@ -14,9 +14,9 @@ optimizer:
   weight_decay: 0.0001
 
 lr_scheduler:
-  _target_: torch.optim.lr_scheduler.ConstantLR
-  factor: 1.0
-  total_iters: 1
+  _target_: torch.optim.lr_scheduler.StepLR
+  step_size: 10
+  gamma: 0.5
 
 loss_function:
   _target_: src.loss.AntiSpoofingCrossEntropyLoss
