@@ -23,8 +23,12 @@ loss_function:
   label_smoothing: 0.0
 
 metrics:
-  train: []
-  inference: []
+  train:
+    - _target_: src.metrics.Accuracy
+      name: accuracy
+  inference:
+    - _target_: src.metrics.Accuracy
+      name: accuracy
 
 transforms:
   batch_transforms:
