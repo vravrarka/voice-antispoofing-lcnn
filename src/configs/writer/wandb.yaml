@@ -1,9 +1,9 @@
 _target_: src.logger.WandBWriter
 project_name: "voice-antispoofing-lcnn"
 entity: null
-run_name: "lcnn-stft-ce-seed42"
+run_name: "lcnn-stft-ce-seed1"
 mode: "online"
 loss_names: ["loss"] # which losses to log (useful for multi-loss tasks, s.a. GANs)
-log_checkpoints: False # set to True if you want to log save_dir with checkpoints to W&B
+log_checkpoints: True # set to True if you want to log save_dir with checkpoints to W&B
 save_code: True
 id_length: 8 # length of the run_id
