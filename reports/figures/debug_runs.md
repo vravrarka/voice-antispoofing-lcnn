@@ -4,6 +4,7 @@
 
 - Status: core pipeline passed, inference pending
 - Date: 2026-07-22
+- Git commit: 1f9e89706bbdf72f074868755348f9da5d617910
 - WandB run: short-pipeline-test
 - Train examples: 16
 - Dev examples: 16
