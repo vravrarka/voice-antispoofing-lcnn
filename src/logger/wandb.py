@@ -55,7 +55,7 @@ class WandBWriter:
                 save_code=kwargs.get("save_code", False),
             )
             self.wandb = wandb
-            self.run.define_metric("epoch")
+            self.wandb.define_metric("epoch")
 
             for metric_name in (
                 "train_loss",
