@@ -1,6 +1,6 @@
 defaults:
   - model: lcnn
-  - datasets: asvspoof_one_batch_eval
+  - datasets: asvspoof_eval
   - dataloader: asvspoof
   - paths: kaggle
   - _self_
