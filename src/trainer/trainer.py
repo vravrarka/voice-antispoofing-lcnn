@@ -70,7 +70,11 @@ class Trainer(BaseTrainer):
         logs["loss"] = train_loss
         required_metrics = {
             "loss",
+            "accuracy",
             "dev_loss",
+            "dev_accuracy",
+            "eval_loss",
+            "eval_accuracy",
             "eval_eer",
         }
         missing_metrics = (
@@ -88,7 +92,11 @@ class Trainer(BaseTrainer):
                 epoch=epoch,
                 metrics={
                     "train_loss": logs["loss"],
+                    "train_accuracy": logs["accuracy"],
                     "dev_loss": logs["dev_loss"],
+                    "dev_accuracy": logs["dev_accuracy"],
+                    "eval_loss": logs["eval_loss"],
+                    "eval_accuracy": logs["eval_accuracy"],
                     "eval_eer": logs["eval_eer"],
                 },
             )
