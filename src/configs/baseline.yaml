@@ -23,8 +23,8 @@ trainer:
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: auto # device name or "auto"
   override: False # if True, will override the previous run with the same name
-  monitor: "min dev_loss" # "off" or "max/min metric_name", i.e. our goal is to maximize/minimize metric
+  monitor: "off" # "off" or "max/min metric_name", i.e. our goal is to maximize/minimize metric
   save_period: 1 # checkpoint each save_period epochs in addition to the best epoch
-  early_stop: 10 # epochs for early stopping
+  early_stop: 50 # epochs for early stopping
   save_dir: "saved"
   seed: 1
