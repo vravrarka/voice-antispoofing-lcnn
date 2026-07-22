@@ -60,7 +60,7 @@ class WandBWriter:
             for metric_name in (
                 "train_loss",
                 "dev_loss",
-                "eval_err",
+                "eval_eer",
             ):
                 self.wandb.define_metric(
                     metric_name,
