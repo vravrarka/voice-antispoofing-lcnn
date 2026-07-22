@@ -45,8 +45,8 @@ trainer:
   resume_from: null
   device: auto
   override: False
-  monitor: "off"
-  save_period: 1
-  early_stop: ${trainer.n_epochs}
+  monitor: "min dev_loss"
+  save_period: 2
+  early_stop: 10
   save_dir: "saved"
   seed: 1
