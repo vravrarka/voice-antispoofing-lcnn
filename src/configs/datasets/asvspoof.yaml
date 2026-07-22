@@ -1,29 +1,41 @@
 train:
-  _target_: torch.utils.data.ConcatDataset # we can concat datasets if we want to
-  datasets:
-    - _target_: src.datasets.ExampleDataset
-      input_length: 1024
-      dataset_length: 15
-      n_classes: 10
-      name: "train15"
-      instance_transforms: ${transforms.instance_transforms.train}
-    - _target_: src.datasets.ExampleDataset
-      input_length: 1024
-      dataset_length: 20
-      n_classes: 10
-      name: "train20"
-      instance_transforms: ${transforms.instance_transforms.train}
-val:
-  _target_: src.datasets.ExampleDataset
-  input_length: 1024
-  dataset_length: 15
-  n_classes: 10
-  name: "val"
-  instance_transforms: ${transforms.instance_transforms.inference}
-test:
-  _target_: src.datasets.ExampleDataset
-  input_length: 1024
-  dataset_length: 15
-  n_classes: 10
-  name: "test"
-  instance_transforms: ${transforms.instance_transforms.inference}
+  _target_: src.datasets.ASVspoofDataset
+  audio_dir: ${paths.train_audio_dir}
+  protocol_path: ${paths.train_protocol}
+  training: true
+  sample_rate: 16000
+  limit: null
+  feature_extractor:
+    _target_: src.transforms.LogPowerSpectrogram
+    n_fft: 1724
+    win_length: 1724
+    hop_length: 130
+    target_frames: 600
+
+dev:
+  _target_: src.datasets.ASVspoofDataset
+  audio_dir: ${paths.dev_audio_dir}
+  protocol_path: ${paths.dev_protocol}
+  training: false
+  sample_rate: 16000
+  limit: null
+  feature_extractor:
+    _target_: src.transforms.LogPowerSpectrogram
+    n_fft: 1724
+    win_length: 1724
+    hop_length: 130
+    target_frames: 600
+
+eval:
+  _target_: src.datasets.ASVspoofDataset
+  audio_dir: ${paths.eval_audio_dir}
+  protocol_path: ${paths.eval_protocol}
+  training: false
+  sample_rate: 16000
+  limit: null
+  feature_extractor:
+    _target_: src.transforms.LogPowerSpectrogram
+    n_fft: 1724
+    win_length: 1724
+    hop_length: 130
+    target_frames: 600
