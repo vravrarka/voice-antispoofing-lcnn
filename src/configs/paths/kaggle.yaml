@@ -1,30 +1,11 @@
-project:
-  root: /kaggle/working/voice-antispoofing-lcnn
-  reports_dir: /kaggle/working/voice-antispoofing-lcnn/reports
-  figures_dir: /kaggle/working/voice-antispoofing-lcnn/reports/figures
-dataset:
-  la_root: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA
-  protocol_dir: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_cm_protocols
-  
-  train:
-    audio_dir: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_train/flac
-    protocol_path: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt
-  dev:
-    audio_dir: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_dev/flac
-    protocol_path: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.dev.trl.txt
-  eval:
-    audio_dir: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_eval/flac
-    protocol_path: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt
-artifacts:
-  root: /kaggle/working/asvspoof_artifacts
-  checkpoint_dir: /kaggle/working/asvspoof_artifacts/checkpoints
-  prediction_dir: /kaggle/working/asvspoof_artifacts/predictions
-  log_export_dir: /kaggle/working/asvspoof_artifacts/log_exports
-  wandb_dir: /kaggle/working/asvspoof_artifacts/wandb
-grading:
-  root: /kaggle/working/voice-antispoofing-lcnn/grading
-  script_path: /kaggle/working/voice-antispoofing-lcnn/grading/grading.py
-  calculate_eer_path: /kaggle/working/voice-antispoofing-lcnn/grading/calculate_eer.py
-  students_solutions_dir: /kaggle/working/voice-antispoofing-lcnn/grading/students_solutions
-  source_eval_protocol: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.eval.trl.txt
-  local_eval_protocol: /kaggle/working/voice-antispoofing-lcnn/grading/ASVspoof2019.LA.cm.eval.trl.txt
+data_root: /kaggle/input/datasets/awsaf49/asvpoof-2019-dataset/LA/LA
+
+train_audio_dir: ${paths.data_root}/ASVspoof2019_LA_train/flac
+dev_audio_dir: ${paths.data_root}/ASVspoof2019_LA_dev/flac
+eval_audio_dir: ${paths.data_root}/ASVspoof2019_LA_eval/flac
+
+protocol_dir: ${paths.data_root}/ASVspoof2019_LA_cm_protocols
+
+train_protocol: ${paths.protocol_dir}/ASVspoof2019.LA.cm.train.trn.txt
+dev_protocol: ${paths.protocol_dir}/ASVspoof2019.LA.cm.dev.trl.txt
+eval_protocol: ${paths.protocol_dir}/ASVspoof2019.LA.cm.eval.trl.txt
