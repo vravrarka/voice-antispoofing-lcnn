@@ -1,3 +1,4 @@
+from src.metrics.accuracy import Accuracy
 from src.metrics.eer import (
     EERAccumulator,
     bonafide_score_from_logits,
