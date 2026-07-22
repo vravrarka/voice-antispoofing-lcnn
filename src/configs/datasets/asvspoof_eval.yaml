@@ -1,0 +1,13 @@
+eval:
+  _target_: src.datasets.ASVspoofDataset
+  audio_dir: ${paths.eval_audio_dir}
+  protocol_path: ${paths.eval_protocol}
+  training: false
+  sample_rate: 16000
+  limit: null
+  feature_extractor:
+    _target_: src.transforms.LogPowerSpectrogram
+    n_fft: 1724
+    win_length: 1724
+    hop_length: 130
+    target_frames: 600
