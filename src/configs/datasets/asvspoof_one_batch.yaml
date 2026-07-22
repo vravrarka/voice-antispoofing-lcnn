@@ -1,0 +1,41 @@
+train:
+  _target_: src.datasets.ASVspoofDataset
+  audio_dir: ${paths.train_audio_dir}
+  protocol_path: ${hydra:runtime.cwd}/data/debug/one_batch_protocol.txt
+  training: true
+  sample_rate: 16000
+  limit: null
+  feature_extractor:
+    _target_: src.transforms.LogPowerSpectrogram
+    n_fft: 1724
+    win_length: 1724
+    hop_length: 130
+    target_frames: 600
+
+dev:
+  _target_: src.datasets.ASVspoofDataset
+  audio_dir: ${paths.train_audio_dir}
+  protocol_path: ${hydra:runtime.cwd}/data/debug/one_batch_protocol.txt
+  training: false
+  sample_rate: 16000
+  limit: null
+  feature_extractor:
+    _target_: src.transforms.LogPowerSpectrogram
+    n_fft: 1724
+    win_length: 1724
+    hop_length: 130
+    target_frames: 600
+
+eval:
+  _target_: src.datasets.ASVspoofDataset
+  audio_dir: ${paths.train_audio_dir}
+  protocol_path: ${hydra:runtime.cwd}/data/debug/one_batch_protocol.txt
+  training: false
+  sample_rate: 16000
+  limit: null
+  feature_extractor:
+    _target_: src.transforms.LogPowerSpectrogram
+    n_fft: 1724
+    win_length: 1724
+    hop_length: 130
+    target_frames: 600
