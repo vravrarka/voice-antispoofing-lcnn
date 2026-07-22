@@ -45,7 +45,7 @@ class Trainer(BaseTrainer):
             eer_percent, eer_threshold = (
                 eer_accumulator.compute()
             )
-            result["err"] = eer_percent
+            result["eer"] = eer_percent
             self.logger.info(
                 f"Eval EER threshold: "
                 f"{eer_threshold:.6f}"
@@ -71,7 +71,7 @@ class Trainer(BaseTrainer):
         required_metrics = {
             "loss",
             "dev_loss",
-            "eval_err",
+            "eval_eer",
         }
         missing_metrics = (
             required_metrics - set(logs)
@@ -89,7 +89,7 @@ class Trainer(BaseTrainer):
                 metrics={
                     "train_loss": logs["loss"],
                     "dev_loss": logs["dev_loss"],
-                    "eval_err": logs["eval_err"],
+                    "eval_eer": logs["eval_eer"],
                 },
             )
         return logs
