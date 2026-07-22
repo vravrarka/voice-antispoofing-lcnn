@@ -1,0 +1,40 @@
+defaults:
+  - model: lcnn
+  - writer: wandb
+  - datasets: asvspoof
+  - dataloader: asvspoof
+  - _self_
+
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 0.0003
+  weight_decay: 0.0001
+
+lr_scheduler:
+  _target_: torch.optim.lr_scheduler.ConstantLR
+  factor: 1.0
+  total_iters: 1
+
+loss_function:
+  _target_: src.loss.AntiSpoofingCrossEntropyLoss
+  label_smoothing: 0.0
+
+metrics:
+  train: []
+  inference: []
+
+trainer:
+  log_step: 50
+  n_epochs: 50
+  epoch_len: null
+  device_tensors:
+    - features
+    - labels
+  resume_from: null
+  device: auto
+  override: False
+  monitor: "off"
+  save_period: 1
+  early_stop: ${trainer.n_epochs}
+  save_dir: "saved"
+  seed: 1
