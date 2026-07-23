@@ -4,13 +4,6 @@ import torchaudio
 from torch import Tensor, nn
 
 class LogPowerSpectrogram(nn.Module):
-    """
-    Converts a waveform into a fixed-size log-power spectrogram.
-    Input:
-        waveform with shape [channels, samples]
-    Output:
-        spectrogram with shape [1, 863, 600]
-    """
     def __init__(
         self,
         n_fft: int = 1724,
