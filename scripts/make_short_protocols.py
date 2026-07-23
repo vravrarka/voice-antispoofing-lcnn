@@ -20,7 +20,6 @@ def create_balanced_protocol(
     spoof_count: int,
     seed: int,
 ) -> None:
-    """Create a deterministic balanced protocol subset."""
     if not source_path.is_file():
         raise FileNotFoundError(
             f"Protocol was not found: {source_path}"
