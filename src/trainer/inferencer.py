@@ -8,8 +8,6 @@ from src.trainer.base_trainer import BaseTrainer
 
 
 class Inferencer(BaseTrainer):
-    """Load a checkpoint, run inference and export scores."""
-
     def __init__(
         self,
         model,
@@ -54,7 +52,6 @@ class Inferencer(BaseTrainer):
             )
 
     def run_inference(self) -> dict:
-        """Run inference for all configured partitions."""
         part_logs = {}
         for part, dataloader in (
             self.evaluation_dataloaders.items()
@@ -70,7 +67,6 @@ class Inferencer(BaseTrainer):
         batch,
         metrics,
     ) -> dict:
-        """Run one batch through the model."""
         batch = self.move_batch_to_device(batch)
         batch = self.transform_batch(batch)
         outputs = self.model(**batch)
@@ -88,7 +84,6 @@ class Inferencer(BaseTrainer):
         part: str,
         prediction_rows: list[tuple[str, float]],
     ) -> Path:
-        """Save ID and bona fide score without a header."""
         self.save_path.mkdir(
             parents=True,
             exist_ok=True,
@@ -127,7 +122,6 @@ class Inferencer(BaseTrainer):
         part,
         dataloader,
     ) -> dict:
-        """Run inference for one partition."""
         self.is_train = False
         self.model.eval()
         self.evaluation_metrics.reset()
