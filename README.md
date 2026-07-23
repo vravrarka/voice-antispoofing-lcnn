@@ -218,7 +218,6 @@ data/saved/full-eval-final/eval.csv
 
 - Project: [voice-antispoofing-lcnn](https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn)
 - Final Run: `<[ADD_FINAL_RUN_URL](https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn/runs/6zw5r1ha?nw=nwuservarvaravolodicheva)>`
-- W&B Report: 
 
 В W&B должны быть доступны:
 
