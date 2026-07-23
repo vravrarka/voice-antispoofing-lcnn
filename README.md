@@ -218,6 +218,8 @@ data/saved/full-eval-final/eval.csv
 
 - Project: [voice-antispoofing-lcnn](https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn)
 - Final Run: `<[ADD_FINAL_RUN_URL](https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn/runs/6zw5r1ha?nw=nwuservarvaravolodicheva)>`
+- W&B Report (полного обучени): `<https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn/reports/lcnn-full-seed1-stage1--VmlldzoxNzU2NjczOQ?accessToken=se0vc2835rmey8rfy7qj62e11vxzarpqvycb6uinb76mfm29dgb5a4xel6thks8l>`
+-  W&B Report (One-Batch Test): `<https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn/reports/One-batch-test--VmlldzoxNzU2Njc3Mw?accessToken=hkwfcmpyyknm3jrysetbgog3h0by6pvtfv537k665ypf7nejwpynncc7zway23vp>`
 
 В W&B должны быть доступны:
 
