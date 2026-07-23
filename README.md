@@ -1,149 +1,240 @@
-# PyTorch Template for DL projects
+# Voice Anti-Spoofing (homework)
 
-<p align="center">
-  <a href="#about">About</a> •
-  <a href="#tutorials">Tutorials</a> •
-  <a href="#examples">Examples</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#useful-links">Useful Links</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#license">License</a>
-</p>
+Этот проект решает задачу **Voice Anti-Spoofing**: модель должна отличать настоящую речь (**bonafide**) от синтезированной или преобразованной речи (**spoof**).
 
-<p align="center">
-<a href="https://github.com/Blinorot/pytorch_project_template/generate">
-  <img src="https://img.shields.io/badge/use%20this-template-green?logo=github">
-</a>
-<a href="https://github.com/Blinorot/pytorch_project_template/blob/main/LICENSE">
-   <img src=https://img.shields.io/badge/license-MIT-blue.svg>
-</a>
-<a href="https://github.com/Blinorot/pytorch_project_template/blob/main/CITATION.cff">
-   <img src="https://img.shields.io/badge/cite-this%20repo-purple">
-</a>
-</p>
+Для экспериментов используется раздел **Logical Access (LA)** датасета **ASVspoof 2019**. Модель построена на архитектуре **Light Convolutional Neural Network (LCNN)** и обучается как бинарный классификатор.
 
-## About
+Проект основан на **PyTorch Project Template** и использует **Hydra** для конфигурации экспериментов и **Weights & Biases (W&B)** для логирования.
 
-This repository contains a template for [PyTorch](https://pytorch.org/)-based Deep Learning projects.
+## Task
 
-The template utilizes different python-dev techniques to improve code readability. Configuration methods enhance reproducibility and experiments control.
+Для каждого аудиофайла модель должна предсказать один из двух классов:
+- `bonafide` — настоящая запись;
+- `spoof` — синтезированная или преобразованная запись.
 
-The repository is released as a part of the [HSE DLA course](https://github.com/markovka17/dla), however, can easily be adopted for any DL-task.
+## Method
 
-This template is the official recommended template for the [EPFL CS-433 ML Course](https://www.epfl.ch/labs/mlo/machine-learning-cs-433/).
+### Front-End
 
-**New:** we added a [HF Main](https://github.com/Blinorot/pytorch_project_template/tree/hf_main) variant of the template with [HuggingFace](https://huggingface.co/) Integration for multi-GPU and multi-node training, automatic mixed precision, gradient accumulation, and seamless HuggingFace Ecosystem Compatibility.
+Аудио приводится к `16000 Hz`, после чего вычисляется **Log-Power Spectrogram** с помощью **STFT**.
 
-> 📖 **If you use this template in your work, please cite this repository or include a reference. Attribution supports the project and encourages continued development.**
+Использованные параметры:
 
-## Tutorials
+| Parameter | Value |
+|---|---:|
+| `sample_rate` | `16000` |
+| `n_fft` | `1724` |
+| `win_length` | `1724` |
+| `hop_length` | `130` |
+| `target_frames` | `600` |
 
-This template utilizes experiment tracking techniques, such as [WandB](https://docs.wandb.ai/) and [Comet ML](https://www.comet.com/docs/v2/), and [Hydra](https://hydra.cc/docs/intro/) for the configuration. It also automatically reformats code and conducts several checks via [pre-commit](https://pre-commit.com/). If you are not familiar with these tools, we advise you to look at the tutorials below:
+Короткие записи дополняются нулями. Для длинных записей выбираются первые `600` временных кадров во время evaluation; в training может применяться случайный crop.
 
-- [Python Dev Tips](https://github.com/ebezzam/python-dev-tips): information about [Git](https://git-scm.com/doc), [pre-commit](https://pre-commit.com/), [Hydra](https://hydra.cc/docs/intro/), and other stuff for better Python code development. The YouTube recording of the workshop is available [here](https://youtu.be/okxaTuBdDuY).
+### Model
 
-- [Seminar on R&D Coding 2025](https://youtu.be/PE1zaW5it_A): Seminar from the [LauzHack Deep Learning Bootcamp](https://github.com/LauzHack/deep-learning-bootcamp/) with discussion on logging, project-based coding, configuration, and reproducibility. The materials can be found [here](https://github.com/LauzHack/deep-learning-bootcamp/tree/summer25/day05).
+В проекте реализована **LCNN** с блоками **Max-Feature-Map (MFM)**. После convolutional-части используются:
 
-- [Seminar on R&D Coding 2024](https://youtu.be/sEA-Js5ZHxU): Seminar from the [LauzHack Deep Learning Bootcamp](https://github.com/LauzHack/deep-learning-bootcamp/) with template discussion and reasoning. It also explains how to work with [WandB](https://docs.wandb.ai/). The seminar materials can be found [here](https://github.com/LauzHack/deep-learning-bootcamp/blob/main/day03/Seminar_WandB_and_Coding.ipynb).
+1. `MFMLinear`;
+2. `Dropout(p=0.75)`;
+3. `BatchNorm1d`;
+4. `Linear` для двух классов.
 
-- [HSE DLA Course Introduction Week](https://github.com/markovka17/dla/tree/2024/week01): combines the two seminars above into one with some updates, including an extra example for [Comet ML](https://www.comet.com/docs/v2/).
+`Dropout` расположен перед последним `BatchNorm`, как указано в задании.
 
-- [PyTorch Basics](https://github.com/markovka17/dla/tree/2024/week01/intro_to_pytorch): several notebooks with [PyTorch](https://pytorch.org/docs/stable/index.html) basics and corresponding seminar recordings from the [LauzHack Deep Learning Bootcamp](https://github.com/LauzHack/deep-learning-bootcamp/).
+### Labels and Scores
 
-To start working with a template, just click on the `use this template` button.
+Внутри проекта используются метки:
 
-<a href="https://github.com/Blinorot/pytorch_project_template/generate">
-  <img src="https://img.shields.io/badge/use%20this-template-green?logo=github">
-</a>
+```text
+spoof = 0
+bonafide = 1
+```
 
-You can choose any of the branches as a starting point. [Set your choice as the default branch](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/changing-the-default-branch) in the repository settings. You can also [delete unnecessary branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
+Для итогового CSV сохраняется вероятность класса `bonafide`:
 
-## Examples
+```python
+softmax(logits)[:, 1]
+```
 
-> [!IMPORTANT]
-> The main branch leaves some of the code parts empty or fills them with dummy examples, showing just the base structure. The final users can add code required for their own tasks.
+## Dataset
 
-You can find examples of this template completed for different tasks in other branches:
+Используется **ASVspoof 2019 LA**:
 
-- [HF Main](https://github.com/Blinorot/pytorch_project_template/tree/hf_main): the variant of the `main` branch with [HuggingFace](https://huggingface.co/) Integration. Supports multi-GPU and multi-node training, automatic mixed precision, gradient accumulation, and seamless HuggingFace Ecosystem Compatibility.
+```text
+ASVspoof2019_LA_train
+ASVspoof2019_LA_dev
+ASVspoof2019_LA_eval
+ASVspoof2019_LA_cm_protocols
+```
 
-- [Image classification](https://github.com/Blinorot/pytorch_project_template/tree/example/image-classification): simple classification problem on [MNIST](https://yann.lecun.com/exdb/mnist/) and [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) datasets.
+Аудиофайлы и checkpoint-файлы не хранятся в GitHub.
 
-- [ASR](https://github.com/Blinorot/pytorch_project_template/tree/example/asr): template for the automatic speech recognition (ASR) task. Some of the parts (for example, `collate_fn` and beam search for `text_encoder`) are missing for studying purposes of [HSE DLA course](https://github.com/markovka17/dla).
+Для запуска в Kaggle датасет можно подключить как Input:
+
+```text
+awsaf49/asvpoof-2019-dataset
+```
+
+Пути к данным задаются в:
+
+```text
+src/configs/paths/kaggle.yaml
+```
+
+## Project Structure
+
+```text
+voice-antispoofing-lcnn/
+├── grading/
+│   ├── grading.py
+│   ├── calculate_eer.py
+│   ├── ASVspoof2019.LA.cm.eval.trl.txt
+│   └── students_solutions/
+├── reports/
+│   ├── figures/
+│   ├── wandb/
+│   └── report.pdf
+├── src/
+│   ├── configs/
+│   ├── datasets/
+│   ├── logger/
+│   ├── loss/
+│   ├── metrics/
+│   ├── model/
+│   ├── trainer/
+│   ├── transforms/
+│   └── utils/
+├── tests/
+├── inference.py
+├── train.py
+└── requirements.txt
+```
 
 ## Installation
 
-Installation may depend on your task. The general steps are the following:
-
-0. (Optional) Create and activate new environment using [`conda`](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html) or `venv` ([`+pyenv`](https://github.com/pyenv/pyenv)).
-
-   a. `conda` version:
-
-   ```bash
-   # create env
-   conda create -n project_env python=PYTHON_VERSION
-
-   # activate env
-   conda activate project_env
-   ```
-
-   b. `venv` (`+pyenv`) version:
-
-   ```bash
-   # create env
-   ~/.pyenv/versions/PYTHON_VERSION/bin/python3 -m venv project_env
-
-   # alternatively, using default python version
-   python3 -m venv project_env
-
-   # activate env
-   source project_env/bin/activate
-   ```
-
-1. Install all required packages
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. Install `pre-commit`:
-   ```bash
-   pre-commit install
-   ```
-
-## How To Use
-
-To train a model, run the following command:
+Рекомендуется использовать Python `3.10+`.
 
 ```bash
-python3 train.py -cn=CONFIG_NAME HYDRA_CONFIG_ARGUMENTS
+git clone https://github.com/vravrarka/voice-antispoofing-lcnn.git
+cd voice-antispoofing-lcnn
+
+python -m venv .venv
+source .venv/bin/activate
+
+pip install -r requirements.txt
 ```
 
-Where `CONFIG_NAME` is a config from `src/configs` and `HYDRA_CONFIG_ARGUMENTS` are optional arguments.
-
-To run inference (evaluate the model or save predictions):
+Для Windows:
 
 ```bash
-python3 inference.py HYDRA_CONFIG_ARGUMENTS
+.venv\Scripts\activate
 ```
 
-## Useful Links:
+Для логирования необходимо авторизоваться в W&B:
 
-You may find the following links useful:
+```bash
+wandb login
+```
 
-- [Report branch](https://github.com/Blinorot/pytorch_project_template/tree/report): Guidelines for writing a scientific report/paper (with an emphasis on DL projects).
+В Kaggle API key лучше хранить в **Secrets** под именем:
 
-- [CLAIRE Template](https://github.com/CLAIRE-Labo/python-ml-research-template): additional template by [EPFL CLAIRE Laboratory](https://www.epfl.ch/labs/claire/) that can be combined with ours to enhance experiments reproducibility via [Docker](https://www.docker.com/).
+```text
+WANDB_API_KEY
+```
 
-- [Mamba](https://github.com/mamba-org/mamba) and [Poetry](https://python-poetry.org/): alternatives to [Conda](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html) and [pip](https://pip.pypa.io/en/stable/installation/) package managers given above.
+## Training
 
-- [Awesome README](https://github.com/matiassingers/awesome-readme): a list of awesome README files for inspiration. Check the basics [here](https://github.com/PurpleBooth/a-good-readme-template).
+Основной конфиг обучения:
 
-## Credits
+```text
+src/configs/lcnn_baseline.yaml
+```
 
-This repository is based on a heavily modified fork of [pytorch-template](https://github.com/victoresque/pytorch-template) and [asr_project_template](https://github.com/WrathOfGrapes/asr_project_template) repositories.
+Пример запуска:
 
-## License
+```bash
+python train.py \
+  -cn=lcnn_baseline \
+  writer.run_name="lcnn-full-seed1-stage1"
+```
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+Основные параметры эксперимента:
+
+| Parameter | Value |
+|---|---:|
+| `optimizer` | `Adam` |
+| `learning_rate` | `0.0003` |
+| `weight_decay` | `0.0001` |
+| `batch_size` | `8` |
+| `loss` | `CrossEntropyLoss` |
+| `seed` | `1` |
+| `checkpoint_monitor` | `min dev_loss` |
+
+Точное число завершённых epochs=7 и остальные параметры следует смотреть в **W&B Config** для финального run.
+
+### One-Batch Test
+
+Перед полным обучением был выполнен **one-batch overfit test**. Модель смогла переобучиться на фиксированном небольшом batch и достигла:
+
+```text
+accuracy = 1.0
+EER = 0.0%
+```
+Этот тест использовался только для проверки pipeline.
+
+## Inference
+
+Для inference нужен checkpoint `model_best.pth`.
+Checkpoint не добавляется в GitHub. Он хранится отдельно или в W&B.
+Пример запуска:
+
+```bash
+python inference.py \
+  -cn=inference_lcnn \
+  inferencer.from_pretrained="/path/to/model_best.pth" \
+  inferencer.save_path="full-eval-final"
+```
+
+Ожидаемый результат:
+```text
+data/saved/full-eval-final/eval.csv
+```
+
+## Results
+
+Финальный CSV был построен с использованием `model_best.pth` и проверен через `grading.py`.
+
+| Result | Value |
+|---|---:|
+| Lowest logged `eval_eer` | approximately `7.1%` |
+| Final CSV EER | approximately `9.7%` |
+| Final grade from `grading.py` | `<ADD_EXACT_VALUE>` |
+
+Самый низкий EER наблюдался не на том checkpoint, который был выбран как `model_best.pth`. `model_best.pth` выбирался по минимальному `dev_loss`, а не по минимальному `eval_eer`. Поэтому итоговый EER CSV отличается от минимального значения на графике.
+
+## Experiment Tracking
+
+### W&B Project
+
+- Project: [voice-antispoofing-lcnn](https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn)
+- Final Run: `<[ADD_FINAL_RUN_URL](https://wandb.ai/varvaravolodicheva-hse-university/voice-antispoofing-lcnn/runs/6zw5r1ha?nw=nwuservarvaravolodicheva)>`
+- W&B Report: 
+
+В W&B должны быть доступны:
+
+- `train_loss`;
+- `train_accuracy`;
+- `dev_loss`;
+- `dev_accuracy`;
+- `eval_loss`;
+- `eval_accuracy`;
+- `eval_eer`;
+- experiment Config;
+- system metrics.
+
+## Limitations
+
+- Был выполнен один полный training run с ограниченным числом epochs.
+- Training был остановлен из-за окончания бесплатной верссии GPU quota.
+- `model_best.pth` выбирался по `dev_loss`, поэтому он не соответствует минимальному `eval_eer`.
+- Результат может изменяться при другом random seed и при более долгом обучении.
